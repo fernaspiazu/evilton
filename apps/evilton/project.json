@@ -1,0 +1,56 @@
+{
+  "name": "evilton",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/evilton/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/evilton",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/evilton/src/main.ts",
+        "tsConfig": "apps/evilton/tsconfig.app.json",
+        "assets": ["apps/evilton/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "evilton:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "evilton:build:development"
+        },
+        "production": {
+          "buildTarget": "evilton:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
