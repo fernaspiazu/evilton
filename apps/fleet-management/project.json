@@ -1,0 +1,44 @@
+{
+  "name": "fleet-management",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/fleet-management/src",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint \"src/**/*.ts*\"",
+        "cwd": "apps/fleet-management"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noemit",
+        "cwd": "apps/fleet-management"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rimraf dist .tsbuildinfo && tsc",
+        "cwd": "apps/fleet-management"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest --run",
+        "cwd": "apps/fleet-management"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/src/index.js",
+        "cwd": "apps/fleet-management"
+      }
+    }
+  },
+  "tags": []
+}

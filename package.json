@@ -2,12 +2,23 @@
   "name": "@evilton/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "lint": "nx lint",
+    "lint:all": "nx run-many --target=lint",
+    "typecheck": "nx typecheck",
+    "typecheck:all": "nx run-many --target=typecheck",
+    "build": "nx build",
+    "build:all": "nx run-many --target=build",
+    "test": "nx test",
+    "test:all": "nx run-many --target=test",
+    "dev": "nx dev"
+  },
   "private": true,
   "dependencies": {
     "@fastify/autoload": "~5.7.1",
     "@fastify/sensible": "~5.2.0",
     "axios": "^1.6.0",
+    "dotenv": "^16.4.5",
     "fastify": "~4.13.0",
     "fastify-plugin": "~4.5.0",
     "tslib": "^2.3.0"
@@ -34,6 +45,7 @@
     "jest-environment-node": "^29.4.1",
     "nx": "18.1.2",
     "prettier": "^2.6.2",
+    "rimraf": "^5.0.5",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
     "typescript": "~5.3.2"

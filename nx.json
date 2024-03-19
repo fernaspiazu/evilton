@@ -1,4 +1,5 @@
 {
+  "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
@@ -15,11 +16,30 @@
     "sharedGlobals": []
   },
   "targetDefaults": {
-    "@nx/esbuild:esbuild": {
+    "lint": {
+      "cache": false,
+      "dependsOn": ["^lint"]
+    },
+    "typecheck": {
+      "cache": false,
+      "dependsOn": ["^typecheck"]
+    },
+    "build": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "cache": true,
+      "dependsOn": ["^test", "^build"]
+    },
+    "dev": {
+      "cache": false,
+      "dependsOn": ["^build"]
     }
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
   },
   "plugins": [
     {

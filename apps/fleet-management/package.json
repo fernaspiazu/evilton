@@ -1,0 +1,12 @@
+{
+  "name": "fleet-management",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "This project was bootstrapped with Fastify-CLI.",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.26.1"
+  }
+}
