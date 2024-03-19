@@ -35,7 +35,7 @@
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node dist/src/index.js",
+        "command": "nodemon --watch \"./src/*\" --exec \"tsc && node dist/src/index.js\" -e ts,js,vert,frag,wgsl,d.ts",
         "cwd": "apps/fleet-management"
       }
     }
