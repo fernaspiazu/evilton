@@ -34,7 +34,7 @@ DDD Workshop with [Vlad Khononov](https://twitter.com/vladikk)
    pnpm dev fleet-management
    ```
 
-6. Launch seed to populate database
+6. Launch seed to populate database. You can launch it whenever you want to re-initialize the data.
 
    ```bash
    curl http://localhost:3000/seed
