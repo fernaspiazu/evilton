@@ -1,7 +1,6 @@
 import { Aircraft } from '../repository';
 
 export interface AircraftView {
-  id: number | undefined;
   model: string | undefined;
   manufacturer: string | undefined;
   wingspan: number | undefined;
@@ -21,8 +20,8 @@ export class AircraftService {
     return Aircraft.find().then((e) => e.map(this.toAircraftView));
   }
 
-  async findById(id: number): Promise<AircraftView | null> {
-    const aircraft = await Aircraft.findOneBy({ id: id });
+  async findByModel(model: string): Promise<AircraftView | null> {
+    const aircraft = await Aircraft.findOneBy({ model: model });
     if (!aircraft) {
       return null;
     }
@@ -31,11 +30,11 @@ export class AircraftService {
 
   async persist(
     aircraft: AircraftView,
-    id: number | undefined = undefined
-  ): Promise<number> {
+    model: string | undefined = undefined,
+  ): Promise<string> {
     let aircraftToPersist: Aircraft;
-    if (id) {
-      aircraftToPersist = await Aircraft.findOneBy({ id: id });
+    if (model) {
+      aircraftToPersist = await Aircraft.findOneBy({ model: model });
       aircraftToPersist.version += 1;
     } else {
       aircraftToPersist = new Aircraft();
@@ -44,17 +43,16 @@ export class AircraftService {
 
     this.toAircraftEntity(aircraft, aircraftToPersist);
     const persistedAircraft = await aircraftToPersist.save();
-    return persistedAircraft.id;
+    return persistedAircraft.model;
   }
 
-  async delete(id: number): Promise<void> {
-    const result = await Aircraft.delete(id);
+  async delete(model: string): Promise<void> {
+    const result = await Aircraft.delete(model);
     console.log('rows affected:', result.affected);
   }
 
   private toAircraftView(from: Aircraft): AircraftView {
     return {
-      id: from.id,
       model: from.model,
       manufacturer: from.manufacturer,
       wingspan: from.wingspan,

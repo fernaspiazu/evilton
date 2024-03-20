@@ -2,6 +2,15 @@ export const cabinLayoutData = {
   id: 'C3005',
   width: 310,
   length: 4000,
+  fleetUnits: [
+    {
+      tailNumber: 'E731',
+      model: '737-300',
+      manufacturingDate: new Date(1984, 4, 20),
+      purchaseDate: new Date(2015, 3, 15),
+      nextMaintenanceDate: new Date(2024, 3, 25),
+    },
+  ],
   rows: [
     {
       rowNumber: 1,

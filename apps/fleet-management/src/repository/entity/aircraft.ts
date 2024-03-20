@@ -1,18 +1,17 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToMany,
 } from 'typeorm';
+import { FleetUnit } from './fleet-unit';
 
 @Entity()
 export class Aircraft extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
+  @PrimaryColumn()
   model: string;
 
   @Column()
@@ -44,6 +43,9 @@ export class Aircraft extends BaseEntity {
 
   @Column()
   noiseLevel: string;
+
+  @OneToMany(() => FleetUnit, (fleetUnit) => fleetUnit.model)
+  fleetUnits: FleetUnit[];
 
   @Column()
   version: number;

@@ -3,24 +3,26 @@ import { AircraftService, AircraftView } from '../../service';
 
 export type AircraftRoute = (s: AircraftService) => RouteOptions;
 
+const modelParam = {
+  type: 'object',
+  properties: {
+    model: { type: 'string' },
+  },
+};
+
 export const findOneAircraft: AircraftRoute = (aircraftService) => ({
   method: 'GET',
-  url: '/api/aircrafts/:id',
-  schema: {
-    params: {
-      type: 'object',
-      properties: {
-        id: { type: 'number' },
-      },
-    },
-  },
+  url: '/api/aircrafts/:model',
+  schema: { params: modelParam },
   handler: async function (req, resp) {
-    const { id } = req.params as { id: number };
-    const aircraft = await aircraftService.findById(id);
+    const { model } = req.params as { model: string };
+    const aircraft = await aircraftService.findByModel(model);
     if (aircraft) {
       resp.status(200).send({ data: aircraft });
     } else {
-      resp.status(404).send({ message: `Aircraft with id [${id}] not found` });
+      resp
+        .status(404)
+        .send({ message: `Aircraft with id [${model}] not found` });
     }
   },
 });
@@ -46,37 +48,23 @@ export const createNewAircraft: AircraftRoute = (aircraftService) => ({
 
 export const updateAircraft: AircraftRoute = (aircraftService) => ({
   method: 'PUT',
-  url: '/api/aircrafts/:id',
-  schema: {
-    params: {
-      type: 'object',
-      properties: {
-        id: { type: 'number' },
-      },
-    },
-  },
+  url: '/api/aircrafts/:model',
+  schema: { params: modelParam },
   handler: async function (req, resp) {
     const body = req.body as AircraftView;
-    const { id } = req.params as { id: number };
-    const aircraftId = await aircraftService.persist(body, id);
+    const { model } = req.params as { model: string };
+    const aircraftId = await aircraftService.persist(body, model);
     resp.status(200).send({ message: `Update aircraft`, id: aircraftId });
   },
 });
 
 export const deleteAircraft: AircraftRoute = (aircraftService) => ({
   method: 'DELETE',
-  url: '/api/aircrafts/:id',
-  schema: {
-    params: {
-      type: 'object',
-      properties: {
-        id: { type: 'number' },
-      },
-    },
-  },
+  url: '/api/aircrafts/:model',
+  schema: { params: modelParam },
   handler: async function (req, resp) {
-    const { id } = req.params as { id: number };
-    await aircraftService.delete(id);
+    const { model } = req.params as { model: string };
+    await aircraftService.delete(model);
     resp.status(200).send({ message: 'Deleted aircraft' });
   },
 });
