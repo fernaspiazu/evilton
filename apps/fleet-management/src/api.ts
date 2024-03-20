@@ -34,15 +34,46 @@ export const fastifyApp = async (aircraftService: AircraftService) => {
     async (req, resp) => {
       const { id } = req.params as { id: number };
       const aircraft = await aircraftService.findById(id);
-      resp.status(200).send({ data: aircraft });
+      if (aircraft) {
+        resp.status(200).send({ data: aircraft });
+      } else {
+        resp
+          .status(404)
+          .send({ message: `Aircraft with id [${id}] not found` });
+      }
     }
   );
 
   fastify.post('/api/aircrafts', async (req, resp) => {
     const body = req.body as AircraftView;
-    const aircraftId = await aircraftService.save(body);
+    const aircraftId = await aircraftService.persist(body);
     resp.status(201).send({ message: `Saved new aircraft`, id: aircraftId });
   });
+
+  fastify.put('/api/aircrafts/:id', async (req, resp) => {
+    const body = req.body as AircraftView;
+    const aircraftId = await aircraftService.persist(body);
+    resp.status(200).send({ message: `Update aircraft`, id: aircraftId });
+  });
+
+  fastify.delete(
+    '/api/aircrafts/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+          },
+        },
+      },
+    },
+    async (req, resp) => {
+      const { id } = req.params as { id: number };
+      await aircraftService.delete(id);
+      resp.status(200).send({ message: 'Deleted aircraft' });
+    }
+  );
 
   return fastify;
 };

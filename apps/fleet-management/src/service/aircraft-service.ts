@@ -21,15 +21,35 @@ export class AircraftService {
     return Aircraft.find().then((e) => e.map(this.toAircraftView));
   }
 
-  async findById(id: number): Promise<AircraftView> {
-    return Aircraft.findOneBy({ id: id }).then(this.toAircraftView);
+  async findById(id: number): Promise<AircraftView | null> {
+    const aircraft = await Aircraft.findOneBy({ id: id });
+    if (!aircraft) {
+      return null;
+    }
+    return this.toAircraftView(aircraft);
   }
 
-  async save(aircraft: AircraftView): Promise<number> {
-    const newAircraft = this.toAircraftEntity(aircraft);
-    newAircraft.version = 1;
-    const savedAircraft = await newAircraft.save();
-    return savedAircraft.id;
+  async persist(
+    aircraft: AircraftView,
+    id: number | undefined = undefined
+  ): Promise<number> {
+    let aircraftToPersist: Aircraft;
+    if (id) {
+      aircraftToPersist = await Aircraft.findOneBy({ id: id });
+      aircraftToPersist.version += 1;
+    } else {
+      aircraftToPersist = new Aircraft();
+      aircraftToPersist.version = 1;
+    }
+
+    this.toAircraftEntity(aircraft, aircraftToPersist);
+    const persistedAircraft = await aircraftToPersist.save();
+    return persistedAircraft.id;
+  }
+
+  async delete(id: number): Promise<void> {
+    const result = await Aircraft.delete(id);
+    console.log('rows affected:', result.affected);
   }
 
   private toAircraftView(from: Aircraft): AircraftView {
@@ -50,20 +70,17 @@ export class AircraftService {
     };
   }
 
-  private toAircraftEntity(from: AircraftView): Aircraft {
-    const aircraft = new Aircraft();
-    aircraft.model = from.model;
-    aircraft.manufacturer = from.manufacturer;
-    aircraft.wingspan = from.wingspan;
-    aircraft.cabinWidth = from.cabinWidth;
-    aircraft.cabinHeight = from.cabinHeight;
-    aircraft.cabinLength = from.cabinLength;
-    aircraft.cargoCapacity = from.cargoCapacity;
-    aircraft.range = from.range;
-    aircraft.cruiseSpeed = from.cruiseSpeed;
-    aircraft.engineType = from.engineType;
-    aircraft.noiseLevel = from.noiseLevel;
-
-    return aircraft;
+  private toAircraftEntity(from: AircraftView, to: Aircraft): void {
+    to.model = from.model ?? to.model;
+    to.manufacturer = from.manufacturer ?? to.manufacturer;
+    to.wingspan = from.wingspan ?? to.wingspan;
+    to.cabinWidth = from.cabinWidth ?? to.cabinWidth;
+    to.cabinHeight = from.cabinHeight ?? to.cabinHeight;
+    to.cabinLength = from.cabinLength ?? to.cabinLength;
+    to.cargoCapacity = from.cargoCapacity ?? to.cargoCapacity;
+    to.range = from.range ?? to.range;
+    to.cruiseSpeed = from.cruiseSpeed ?? to.cruiseSpeed;
+    to.engineType = from.engineType ?? to.engineType;
+    to.noiseLevel = from.noiseLevel ?? to.noiseLevel;
   }
 }
