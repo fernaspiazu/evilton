@@ -1,6 +1,6 @@
 import { fastifyApp } from './api';
 import { AppDataSource } from './repository';
-import { AircraftService } from './service';
+import { AircraftService, SeatTypeService } from './service';
 
 async function main() {
   if (!AppDataSource.isInitialized) {
@@ -8,7 +8,8 @@ async function main() {
   }
 
   const aircraftService = new AircraftService();
-  const api = await fastifyApp(aircraftService);
+  const seatTypeService = new SeatTypeService();
+  const api = await fastifyApp(aircraftService, seatTypeService);
 
   try {
     await api.listen({
