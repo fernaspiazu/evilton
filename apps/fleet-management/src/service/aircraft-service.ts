@@ -1,6 +1,7 @@
 import { Aircraft } from '../repository';
 
 export interface AircraftView {
+  id: number | undefined;
   model: string;
   manufacturer: string;
   wingspan: number;
@@ -20,6 +21,10 @@ export class AircraftService {
     return Aircraft.find().then((e) => e.map(this.toAircraftView));
   }
 
+  async findById(id: number): Promise<AircraftView> {
+    return Aircraft.findOneBy({ id: id }).then(this.toAircraftView);
+  }
+
   async save(aircraft: AircraftView): Promise<number> {
     const newAircraft = this.toAircraftEntity(aircraft);
     newAircraft.version = 1;
@@ -29,6 +34,7 @@ export class AircraftService {
 
   private toAircraftView(from: Aircraft): AircraftView {
     return {
+      id: from.id,
       model: from.model,
       manufacturer: from.manufacturer,
       wingspan: from.wingspan,

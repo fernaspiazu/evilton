@@ -2,11 +2,12 @@ import { FastifyInstance } from 'fastify';
 import Fastify from 'fastify';
 import { seed } from './repository';
 import { AircraftService, AircraftView } from './service';
+import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
 
 export const fastifyApp = async (aircraftService: AircraftService) => {
   const fastify: FastifyInstance = Fastify({
     logger: true,
-  });
+  }).withTypeProvider<JsonSchemaToTsProvider>();
 
   fastify.get('/seed', async (_req, resp) => {
     await seed();
@@ -18,9 +19,28 @@ export const fastifyApp = async (aircraftService: AircraftService) => {
     resp.status(200).send({ data: aircrafts });
   });
 
+  fastify.get(
+    '/api/aircrafts/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+          },
+        },
+      },
+    },
+    async (req, resp) => {
+      const { id } = req.params as { id: number };
+      const aircraft = await aircraftService.findById(id);
+      resp.status(200).send({ data: aircraft });
+    }
+  );
+
   fastify.post('/api/aircrafts', async (req, resp) => {
-    const body = req.body;
-    const aircraftId = await aircraftService.save(body as AircraftView);
+    const body = req.body as AircraftView;
+    const aircraftId = await aircraftService.save(body);
     resp.status(201).send({ message: `Saved new aircraft`, id: aircraftId });
   });
 

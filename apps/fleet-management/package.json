@@ -11,5 +11,8 @@
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
     "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@fastify/type-provider-json-schema-to-ts": "^3.0.0"
   }
 }
