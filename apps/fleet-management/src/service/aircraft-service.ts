@@ -33,11 +33,9 @@ export class AircraftService {
     aircraft: AircraftView,
     id: number | undefined = undefined
   ): Promise<number> {
-    console.log(`============================ ${id}`);
     let aircraftToPersist: Aircraft;
     if (id) {
       aircraftToPersist = await Aircraft.findOneBy({ id: id });
-      console.log(`============================ ${aircraftToPersist}`);
       aircraftToPersist.version += 1;
     } else {
       aircraftToPersist = new Aircraft();
