@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Aircraft } from './entity';
+import { SeatType } from './entity/seat-type';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -10,7 +11,7 @@ export const AppDataSource = new DataSource({
   database: 'postgres',
   synchronize: true,
   logging: true,
-  entities: [Aircraft],
+  entities: [Aircraft, SeatType],
   subscribers: [],
   migrations: [],
 });

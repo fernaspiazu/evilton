@@ -1,6 +1,11 @@
 import { fastifyApp } from './api';
+import { AppDataSource } from './datasource';
 
 async function main() {
+  if (!AppDataSource.isInitialized) {
+    await AppDataSource.initialize();
+  }
+
   const api = await fastifyApp();
 
   try {
