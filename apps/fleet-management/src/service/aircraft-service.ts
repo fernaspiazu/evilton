@@ -2,18 +2,18 @@ import { Aircraft } from '../repository';
 
 export interface AircraftView {
   id: number | undefined;
-  model: string;
-  manufacturer: string;
-  wingspan: number;
-  cabinWidth: number;
-  cabinHeight: number;
-  cabinLength: number;
-  cargoCapacity: number;
-  range: number;
-  cruiseSpeed: number;
-  engineType: string;
-  noiseLevel: string;
-  version: number;
+  model: string | undefined;
+  manufacturer: string | undefined;
+  wingspan: number | undefined;
+  cabinWidth: number | undefined;
+  cabinHeight: number | undefined;
+  cabinLength: number | undefined;
+  cargoCapacity: number | undefined;
+  range: number | undefined;
+  cruiseSpeed: number | undefined;
+  engineType: string | undefined;
+  noiseLevel: string | undefined;
+  version: number | undefined;
 }
 
 export class AircraftService {
@@ -33,9 +33,11 @@ export class AircraftService {
     aircraft: AircraftView,
     id: number | undefined = undefined
   ): Promise<number> {
+    console.log(`============================ ${id}`);
     let aircraftToPersist: Aircraft;
     if (id) {
       aircraftToPersist = await Aircraft.findOneBy({ id: id });
+      console.log(`============================ ${aircraftToPersist}`);
       aircraftToPersist.version += 1;
     } else {
       aircraftToPersist = new Aircraft();

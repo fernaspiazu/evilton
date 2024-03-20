@@ -50,11 +50,25 @@ export const fastifyApp = async (aircraftService: AircraftService) => {
     resp.status(201).send({ message: `Saved new aircraft`, id: aircraftId });
   });
 
-  fastify.put('/api/aircrafts/:id', async (req, resp) => {
-    const body = req.body as AircraftView;
-    const aircraftId = await aircraftService.persist(body);
-    resp.status(200).send({ message: `Update aircraft`, id: aircraftId });
-  });
+  fastify.put(
+    '/api/aircrafts/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+          },
+        },
+      },
+    },
+    async (req, resp) => {
+      const body = req.body as AircraftView;
+      const { id } = req.params as { id: number };
+      const aircraftId = await aircraftService.persist(body, id);
+      resp.status(200).send({ message: `Update aircraft`, id: aircraftId });
+    }
+  );
 
   fastify.delete(
     '/api/aircrafts/:id',
