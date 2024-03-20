@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToMany,
 } from 'typeorm';
+import { Row } from './row';
 
 @Entity()
 export class SeatType extends BaseEntity {
@@ -35,6 +37,9 @@ export class SeatType extends BaseEntity {
 
   @Column()
   features: string;
+
+  @OneToMany(() => Row, (row) => row.seat, { cascade: true, lazy: true })
+  rows: Row[];
 
   @Column()
   version: number;

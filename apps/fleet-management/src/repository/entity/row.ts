@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   BaseEntity,
   ManyToOne,
-  OneToOne,
 } from 'typeorm';
 import { SeatType, CabinLayout } from '..';
 
@@ -21,7 +20,7 @@ export class Row extends BaseEntity {
   @Column()
   extraSpace: number;
 
-  @OneToOne(() => SeatType, (seatType) => seatType.seatTypeId)
+  @ManyToOne(() => SeatType, (seatType) => seatType.rows)
   seat: SeatType;
 
   @ManyToOne(() => CabinLayout, (cabinLayout) => cabinLayout.rows)
