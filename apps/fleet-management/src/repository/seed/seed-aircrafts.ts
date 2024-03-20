@@ -1,5 +1,5 @@
-import { AppDataSource } from '../../datasource';
-import { Aircraft } from '../aircraft';
+import { AppDataSource } from '../datasource';
+import { Aircraft } from '../entity/aircraft';
 
 export const seedAircrafts = async () => {
   await AppDataSource.createQueryBuilder()

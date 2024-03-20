@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Aircraft } from './entity';
+import { Aircraft } from '.';
 import { SeatType } from './entity/seat-type';
 
 export const AppDataSource = new DataSource({

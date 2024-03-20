@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import Fastify from 'fastify';
-import { seed } from './entity';
+import { seed } from './repository';
 
 export const fastifyApp = async () => {
   const fastify: FastifyInstance = Fastify({

@@ -1,5 +1,5 @@
 import { fastifyApp } from './api';
-import { AppDataSource } from './datasource';
+import { AppDataSource } from './repository';
 
 async function main() {
   if (!AppDataSource.isInitialized) {
