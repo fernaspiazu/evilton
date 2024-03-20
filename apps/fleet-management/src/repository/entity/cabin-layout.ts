@@ -23,7 +23,7 @@ export class CabinLayout extends BaseEntity {
   @Column()
   length: number;
 
-  @OneToMany(() => Row, (row) => row.cabinLayout, { cascade: true })
+  @OneToMany(() => Row, (row) => row.cabinLayout, { lazy: true })
   rows: Row[];
 
   @Column()

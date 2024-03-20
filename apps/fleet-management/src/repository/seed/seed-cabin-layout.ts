@@ -1,4 +1,4 @@
-import { AppDataSource } from '../datasource';
+import { QueryRunner } from 'typeorm';
 import { CabinLayout } from '../entity/cabin-layout';
 import { Row } from '../entity/row';
 import { SeatType } from '../entity/seat-type';
@@ -71,60 +71,37 @@ const cabinLayoutData = {
   ],
 };
 
-export const seedCabinLayout = async () => {
-  await AppDataSource.createQueryBuilder()
-    .delete()
-    .from(Row)
-    .where('1=1')
+export const seedCabinLayout = async (runner: QueryRunner) => {
+  const seats = await SeatType.find();
+
+  const cabinLayout = new CabinLayout();
+  cabinLayout.id = cabinLayoutData.id;
+  cabinLayout.width = cabinLayoutData.width;
+  cabinLayout.length = cabinLayoutData.length;
+  cabinLayout.version = 1;
+
+  await runner.manager
+    .createQueryBuilder()
+    .insert()
+    .into(CabinLayout)
+    .values(cabinLayout)
     .execute();
 
-  await AppDataSource.createQueryBuilder()
-    .delete()
-    .from(CabinLayout)
-    .where('1=1')
-    .execute();
-
-  const runner = AppDataSource.createQueryRunner('master');
-
-  await runner.startTransaction();
-  try {
-    const seats = await SeatType.find();
-
-    const cabinLayout = new CabinLayout();
-    cabinLayout.id = cabinLayoutData.id;
-    cabinLayout.width = cabinLayoutData.width;
-    cabinLayout.length = cabinLayoutData.length;
-    cabinLayout.version = 1;
+  for (const rowData of cabinLayoutData.rows) {
+    const seat = seats.find((e) => e.seatTypeId === rowData.seatType);
+    const row = new Row();
+    row.id = rowData.id;
+    row.aisle = rowData.aisle;
+    row.extraSpace = rowData.extraSpace;
+    row.cabinLayout = cabinLayout;
+    row.seat = seat;
+    row.version = 1;
 
     await runner.manager
       .createQueryBuilder()
       .insert()
-      .into(CabinLayout)
-      .values(cabinLayout)
+      .into(Row)
+      .values(row)
       .execute();
-
-    for (const rowData of cabinLayoutData.rows) {
-      const seat = seats.find((e) => e.seatTypeId === rowData.seatType);
-      const row = new Row();
-      row.id = rowData.id;
-      row.aisle = rowData.aisle;
-      row.extraSpace = rowData.extraSpace;
-      row.cabinLayout = cabinLayout;
-      row.seat = seat;
-      row.version = 1;
-
-      await runner.manager
-        .createQueryBuilder()
-        .insert()
-        .into(Row)
-        .values(row)
-        .execute();
-    }
-
-    await runner.commitTransaction();
-  } catch (err) {
-    await runner.rollbackTransaction();
-  } finally {
-    await runner.release();
   }
 };

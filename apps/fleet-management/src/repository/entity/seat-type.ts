@@ -38,7 +38,7 @@ export class SeatType extends BaseEntity {
   @Column()
   features: string;
 
-  @OneToMany(() => Row, (row) => row.seat, { cascade: true, lazy: true })
+  @OneToMany(() => Row, (row) => row.seat, { lazy: true })
   rows: Row[];
 
   @Column()

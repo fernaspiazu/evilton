@@ -1,14 +1,9 @@
-import { AppDataSource } from '../datasource';
+import { QueryRunner } from 'typeorm';
 import { Aircraft } from '../entity/aircraft';
 
-export const seedAircrafts = async () => {
-  await AppDataSource.createQueryBuilder()
-    .delete()
-    .from(Aircraft)
-    .where('1=1')
-    .execute();
-
-  await AppDataSource.createQueryBuilder()
+export const seedAircrafts = async (runner: QueryRunner) => {
+  await runner.manager
+    .createQueryBuilder()
     .insert()
     .into(Aircraft)
     .values([
