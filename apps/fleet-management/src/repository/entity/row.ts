@@ -1,7 +1,7 @@
 import {
   Entity,
   Column,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
@@ -11,8 +11,11 @@ import { SeatType, CabinLayout } from '..';
 
 @Entity()
 export class Row extends BaseEntity {
-  @PrimaryColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  rowNumber: number;
 
   @Column()
   aisle: number;
@@ -20,8 +23,11 @@ export class Row extends BaseEntity {
   @Column()
   extraSpace: number;
 
+  @Column({ type: 'varchar', array: true, nullable: true })
+  usedColumns: string[];
+
   @ManyToOne(() => SeatType, (seatType) => seatType.rows)
-  seat: SeatType;
+  seatType: SeatType;
 
   @ManyToOne(() => CabinLayout, (cabinLayout) => cabinLayout.rows)
   cabinLayout: CabinLayout;

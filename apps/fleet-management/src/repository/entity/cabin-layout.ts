@@ -9,9 +9,6 @@ import {
 } from 'typeorm';
 import { Row } from '..';
 
-// @Entity()
-// export class Seat extends BaseEntity {}
-
 @Entity()
 export class CabinLayout extends BaseEntity {
   @PrimaryColumn()

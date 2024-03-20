@@ -2,74 +2,7 @@ import { QueryRunner } from 'typeorm';
 import { CabinLayout } from '../entity/cabin-layout';
 import { Row } from '../entity/row';
 import { SeatType } from '../entity/seat-type';
-
-const cabinLayoutData = {
-  id: 'C3005',
-  width: 310,
-  length: 4000,
-  rows: [
-    {
-      id: 1,
-      aisle: 106,
-      extraSpace: 0,
-      seatType: 'BIZ-ADV',
-    },
-    {
-      id: 2,
-      aisle: 106,
-      extraSpace: 0,
-      seatType: 'BIZ-ADV',
-    },
-    {
-      id: 3,
-      aisle: 106,
-      extraSpace: 0,
-      seatType: 'BIZ-ADV',
-    },
-    {
-      id: 4,
-      aisle: 106,
-      extraSpace: 0,
-      seatType: 'BIZ-ADV',
-    },
-    {
-      id: 5,
-      aisle: 106,
-      extraSpace: 0,
-      seatType: 'BIZ-ADV',
-    },
-    {
-      id: 6,
-      aisle: 126,
-      extraSpace: 10,
-      seatType: 'ECON-CLSC',
-    },
-    {
-      id: 7,
-      aisle: 126,
-      extraSpace: 10,
-      seatType: 'ECON-CLSC',
-    },
-    {
-      id: 8,
-      aisle: 126,
-      extraSpace: 0,
-      seatType: 'ECON-CLSC',
-    },
-    {
-      id: 9,
-      aisle: 126,
-      extraSpace: 0,
-      seatType: 'ECON-CLSC',
-    },
-    {
-      id: 10,
-      aisle: 126,
-      extraSpace: 0,
-      seatType: 'ECON-CLSC',
-    },
-  ],
-};
+import { cabinLayoutData } from './data/cabin-layout';
 
 export const seedCabinLayout = async (runner: QueryRunner) => {
   const seats = await SeatType.find();
@@ -90,11 +23,12 @@ export const seedCabinLayout = async (runner: QueryRunner) => {
   for (const rowData of cabinLayoutData.rows) {
     const seat = seats.find((e) => e.seatTypeId === rowData.seatType);
     const row = new Row();
-    row.id = rowData.id;
+    row.rowNumber = rowData.rowNumber;
     row.aisle = rowData.aisle;
     row.extraSpace = rowData.extraSpace;
+    row.usedColumns = rowData.usedColumns;
     row.cabinLayout = cabinLayout;
-    row.seat = seat;
+    row.seatType = seat;
     row.version = 1;
 
     await runner.manager

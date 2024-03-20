@@ -5,11 +5,15 @@ import { seedCabinLayout } from './seed-cabin-layout';
 import { AppDataSource } from '../datasource';
 
 export const seed = async () => {
+  await AppDataSource.synchronize(true);
   const queryRunner = AppDataSource.createQueryRunner('master');
-  await queryRunner.startTransaction();
   try {
+    await queryRunner.startTransaction();
     await seedAircrafts(queryRunner);
     await seedSeatTypes(queryRunner);
+    await queryRunner.commitTransaction();
+
+    await queryRunner.startTransaction();
     await seedCabinLayout(queryRunner);
     await queryRunner.commitTransaction();
   } catch (err) {
