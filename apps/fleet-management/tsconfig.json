@@ -2,14 +2,21 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ES2022",
-    "lib": ["ES2022"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "lib": ["ES2022", "ES6", "ES5"],
     "types": ["node"],
     "outDir": "./dist",
     "sourceMap": true,
     "incremental": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": false,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "files": ["./.eslintrc.cjs"],
-  "include": ["src/**/*.ts", "./*.d.ts", "./*.config.ts"]
+  "include": ["src/**/*.ts", "./*.d.ts", "./*.config.ts"],
+  "exclude": [
+    "node_modules"
+  ]
 }
